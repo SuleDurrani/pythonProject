@@ -141,7 +141,7 @@ class E(QWidget):
 
     def initUI(self):
 
-        self.resize(1920, 1080)  # set initial size of the window
+        self.resize(1920, 900)  # set initial size of the window
         self.center()  # center the window
         # self.setStyleSheet("background-color: white;")
         self.setStyleSheet("background-color: rgb(240, 240, 240)")
@@ -391,7 +391,7 @@ class E(QWidget):
                         if liTot[x][0] != "Marginality: Unspecified":
                             eachButton = self.tableButton()
                             eachButton.setGeometry(200, 150, 100, 40)
-                            eachButton.setIcon(QIcon('../BscBackup/edit_button.png'))
+                            eachButton.setIcon(QIcon('../pythonProject/edit_button.png'))
                             eachButton.setIconSize(QSize(60, 60))
                             eachButton.setStyleSheet('QPushButton {background-color: #FFFFFF; border:  none}')
 
@@ -406,7 +406,7 @@ class E(QWidget):
                         if liTot[x][0] != "Marginality: Unspecified":
                             eachExampleButton = self.tableExampleButton()
                             # eachExampleButton.setGeometry(200, 150, 100, 40)
-                            eachExampleButton.setIcon(QIcon('../BscBackup/example_icon.png'))
+                            eachExampleButton.setIcon(QIcon('../pythonProject/example_icon.png'))
                             eachExampleButton.setIconSize(QSize(60, 60))
                             eachExampleButton.setStyleSheet('QPushButton {background-color: #FFFFFF; border:  none}')
 
@@ -620,7 +620,7 @@ class Second(E):
 
     def saveButton(self):
         self.button = QPushButton('', self)
-        self.button.setIcon(QIcon('../BscBackup/save.png'))
+        self.button.setIcon(QIcon('../pythonProject/save.png'))
         self.button.setStyleSheet('QPushButton {background-color:#FFFFFF;}')
         self.button.setMaximumWidth(100)
         self.button.setIconSize(QSize(50, 50))
