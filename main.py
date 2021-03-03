@@ -696,7 +696,7 @@ class Second(E):
         f = profileNewest
 
         fileToOpen = '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + location[0] + '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
-        with open('../BscBackup/0.11-RELEASE.html', 'r') as f:
+        with open('../pythonProject/0.11-RELEASE.html', 'r') as f:
             for line in f:
                 if '<!DOCTYPE HTML>' in line:
                     foundHTML = True
