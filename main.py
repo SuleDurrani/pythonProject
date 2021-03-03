@@ -12,7 +12,7 @@ from PyQt5.QtCore import QSize, pyqtSlot
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QDesktopWidget, QTableWidget, \
     QTableWidgetItem, QVBoxLayout, QPushButton, QLabel, QGridLayout, QTextEdit, QHeaderView, QLineEdit, QMenuBar, \
-    QTextBrowser, QAction
+    QTextBrowser, QAction, QAbstractItemView
 from bs4 import BeautifulSoup
 from natsort import natsorted, ns
 
@@ -442,6 +442,8 @@ class E(QWidget):
             self.tableWidget.hideColumn(7)  # to deal with when there are 10/11 columns
 
         # self.tableWidget.setStyleSheet('QTableWidget::item {border-bottom: 1px solid blue;}')
+        self.tableWidget.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.verticalScrollBar().setSingleStep(20)
         self.tableWidget.setStyleSheet("::section{Background-color:rgb(160,160,160);border-radius:1px;}")
         self.tableWidget.verticalScrollBar().setStyleSheet('background:rgb(160,160,160)')
         self.tableWidget.horizontalScrollBar().setStyleSheet('background:rgb(160,160,160)')
