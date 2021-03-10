@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QDesktopWidget, 
     QTableWidgetItem, QVBoxLayout, QPushButton, QLabel, QGridLayout, QTextEdit, QHeaderView, QLineEdit, QMenuBar, \
     QTextBrowser, QAction, QAbstractItemView
 from bs4 import BeautifulSoup
-from natsort import natsorted, ns
+from natsort import natsorted
 
 liOpt = []  # initialize variables for the recommended, the minimum and the optional
 liRec = []  # properties, based on marginality
@@ -46,6 +46,26 @@ class App(QWidget):
         self.initUI()
 
     def initUI(self):
+        print("hello")
+        # app = QApplication(sys.argv)
+        cwd = os.getcwd()
+        cwd = cwd + "\\BioschemasGitClone"
+        try:
+            mkd = os.mkdir(cwd)
+        except OSError as error:
+            print(error)
+        try:
+            git.Git(cwd).clone("https://github.com/BioSchemas/bioschemas.github.io.git")
+        except:
+            print("You have already cloned the repo, there is no need to do it again.")
+
+        global printProfiles
+        printProfiles = os.listdir(cwd + "/bioschemas.github.io/_profiles")
+        global firstChange
+        firstChange = False
+
+        # for elim in printProfiles:
+        #   print(elim)
         self.setWindowTitle(self.title)
         # self.setGeometry(self.left, self.top, self.width, self.height)
         self.setFixedSize(self.width, self.height)
@@ -93,18 +113,20 @@ class App(QWidget):
         self.tableWidget.setColumnCount(1)
         self.tableWidget.setColumnWidth(0, 500)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.verticalScrollBar().setSingleStep(20)
         for i in range(h):
             btn = QPushButton()
             currentButton = printProfiles[i]
-            btn.setText(str(currentButton))
+            btn.setText(str(currentButton) + str(i))
             self.i = i
             btn.clicked.connect(partial(self.on_click, i))
             self.tableWidget.setCellWidget(i, 0, btn)
 
     @pyqtSlot()
     def on_click(self, i):
+        print(str(i)+" iaewhdoiuhwaoiudhwa")
         profile = str(printProfiles[i])
-
         printFiles = os.listdir(
             "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
 
@@ -116,7 +138,7 @@ class App(QWidget):
             x = str(m[0])
             x = x[2:]
             x = int(x)
-            if (x > highest):
+            if x > highest:
                 highest = x
                 newest = elim  # get the newest change to the profile
 
@@ -233,6 +255,7 @@ class E(QWidget):
         self.move(qr.topLeft())
 
     def creatingTable(self):
+        print("hiawdawde")
         data = importYaml()  # get the initial data from the file and set it to a variable
 
         b = data['mapping'][0]
@@ -564,17 +587,24 @@ class E(QWidget):
 
         lenDirectory = h
         print(lenDirectory)
-        x = natsorted(p)            # little function i found that will sort the list in a natural way, similar to windows file explorer
+        x = natsorted(p)  # little function i found that will sort the list in a natural way, similar to windows file explorer
         print(x)
         t = sorted(allVersionList)
         print(t)
+        print("07432788924")
+        print("oahwdh8o" + str(startingHighest))
+        index = t.index(int(startingHighest))
+        print(index)
         count = 0
-        for i in t:
+        for i in range(len(t)):
+            print("c=" + str(count))
+            if i > index:
+                print("i= "+str(i))
+                print("nlent"+str(len(t)))
+                if i != len(t)-1:
+                    print(("llllll " + str(len(allVersionList))))
+                    os.remove('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[i])
             count = count + 1
-            if i > c:
-                print(x[count-1])
-                if(count != len(allVersionList)):
-                    os.remove('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[count-1])
 
 
         currentVersion = startingHighest + 1
@@ -584,8 +614,9 @@ class E(QWidget):
 
         p = os.listdir('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile)  # get the new length of the directory
         fileToRename = '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
-        #print("\n" + p[-1])
-        os.rename('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[-1], '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + fileToRename)
+        # print("\n" + p[-1])
+        if t[-1] != startingHighest:
+            os.rename('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[-1], '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + fileToRename)
 
 
 boxList = []
@@ -680,7 +711,10 @@ class Second(E):
                 w = boxList[i]
                 left = pList[i]
                 right = str(w.toPlainText())
+                if i == 1:
+                    right = ast.literal_eval(right)
                 newEntryList[left] = right
+
             data2['mapping'].append(newEntryList)
             print(newEntryList)
         boxList.clear()
@@ -765,6 +799,8 @@ class Second(E):
         self.tableWidget2.horizontalHeader().hide()
         self.tableWidget2.setStyleSheet("::section{Background-color:rgb(160,160,160);border-radius:1px;}")
         self.tableWidget2.verticalScrollBar().setStyleSheet('background:rgb(160,160,160)')
+        self.tableWidget2.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.tableWidget2.verticalScrollBar().setSingleStep(20)
 
         self.show()
 
@@ -929,9 +965,10 @@ def alignText(text):
 
 def importYaml():
     # cwd = os.getcwd() + "/BioschemasGitClone/bioschemas.github.io/_profiles"
-
+    print("yayyyyy")
     with open('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profileNewest) as f:
         data = list(yaml.safe_load_all(f))
+        print("aaaaaawwww")
         return data[0]
 
 
@@ -949,32 +986,42 @@ def findYamlValue(data, row, rowNames):
     return dataList
 
 
+class StartWarning(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(200, 200, 200, 220)
+        layout = QVBoxLayout()
+        label = QLabel("The application has to download the whole Bioschemas Github, so this may take a few moments. This window will disappear after a few seconds.")
+        label.setWordWrap(True)
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        layout.addWidget(label)
+        self.setLayout(layout)
+        self.center()
+        self.show()
+        #threaded1()
+        QtCore.QTimer.singleShot(8000, self.close)
+        QtCore.QTimer.singleShot(200, openApp)
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+
+def openApp():
+    ex = App()
+    #sys.exit(app.exec_())
+
 def main():
     # importYaml()
-
-    cwd = os.getcwd()
-    cwd = cwd + "\\BioschemasGitClone"
-    try:
-        mkd = os.mkdir(cwd)
-    except OSError as error:
-        print(error)
-    try:
-        git.Git(cwd).clone("https://github.com/BioSchemas/bioschemas.github.io.git")
-    except:
-        print("You have already cloned the repo, there is no need to do it again.")
-
-    global printProfiles
-    printProfiles = os.listdir(cwd + "/bioschemas.github.io/_profiles")
-    global firstChange
-    firstChange = False
-
-    # for elim in printProfiles:
-    #   print(elim)
-
-    app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())
-
+    app2 = QApplication(sys.argv)
+    window = StartWarning()
+    window.show()
+    app2.exec_()
 
 if __name__ == '__main__':
     main()
