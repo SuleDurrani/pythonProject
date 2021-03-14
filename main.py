@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+
 from functools import partial
 import ast
 from datetime import date
@@ -166,6 +167,7 @@ class E(QWidget):
         self.resize(1920, 900)  # set initial size of the window
         self.center()  # center the window
         # self.setStyleSheet("background-color: white;")
+
         self.setStyleSheet("background-color: rgb(240, 240, 240)")
         self.menubar = QMenuBar()
         self.menubar.setFont((QFont("Ariel", 10)))
@@ -207,6 +209,7 @@ class E(QWidget):
         # menubar.setStyleSheet("QMenuBar::item {background: rgb(170,200,200)}")
 
         self.setWindowTitle('Profile Editing Application- Currently Editing: ' + profileNewest)  # set the title of the window
+
         self.creatingTable()  # create the table that will store the property data
         l1 = QLabel()
 
@@ -255,6 +258,8 @@ class E(QWidget):
         self.move(qr.topLeft())
 
     def creatingTable(self):
+        self.tableWidget = QTableWidget()
+
         print("hiawdawde")
         data = importYaml()  # get the initial data from the file and set it to a variable
 
@@ -267,7 +272,6 @@ class E(QWidget):
         # the table to the amount of entries in the file, adjusted for the marginality
         w = len(rowNames)
 
-        self.tableWidget = QTableWidget()
         self.tableWidget.setRowCount(h)
         self.tableWidget.setColumnCount(w)
         self.tableWidget.setHorizontalHeaderLabels(rowNames)
@@ -540,7 +544,11 @@ class E(QWidget):
         self.full.show()
 
     def onClickOpenNotepad(self):
-        subprocess.call(['notepad.exe', '0.11-RELEASE.html'])
+        global profileNewest
+        p = profileNewest
+        print(p)
+        subprocess.call(['notepad.exe', '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + p])
+
 
     def update_display(self, text):
         data = importYaml()  # get the initial data from the file and set it to a variable
@@ -591,7 +599,7 @@ class E(QWidget):
         print(x)
         t = sorted(allVersionList)
         print(t)
-        print("07432788924")
+        print("000")
         print("oahwdh8o" + str(startingHighest))
         index = t.index(int(startingHighest))
         print(index)
@@ -618,24 +626,26 @@ class E(QWidget):
             os.rename('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[-1], '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + fileToRename)
 
 
-boxList = []
 
-
-class Second(E):
+class Second(QWidget):
 
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-        q = self.getInd()
+
         l1 = QLabel()
         l1.setText(
             "This is the area where you can edit a selected property or create a new one.\nJust type in the boxes to change them, "
-            "and hit save when you are done.\nWhen you click save the changes will be saved to a new file.")
+            "and hit save when you are done.\nWhen you click save the changes will be saved to a new file.\nBe sure to hover over each of the property names"
+            "as they have some specific formatting rules")
         l1.setFont((QFont("Ariel", 10)))
-        self.createTable2()
+        boxList = []
+        self.createTable2(boxList)
         self.saveButton()
+        self.button.clicked.connect(partial(clickSave, boxList, l1))
+
         self.layoutH = QGridLayout()
 
         # self.layout2 = QVBoxLayout()  # this sets the layout to be aligned vertically
@@ -643,11 +653,8 @@ class Second(E):
         self.layoutH.addWidget(self.button, 0, 1, 2, 1)
         # self.layout2.addWidget(self.layoutH)
         self.layoutH.addWidget(self.tableWidget2, 2, 0, 1, 2)
-
         self.setLayout(self.layoutH)
-
         self.resize(1280, 720)  # set initial size of the window
-        self.center()
         self.setWindowTitle('Property Editor')
 
     def saveButton(self):
@@ -656,93 +663,10 @@ class Second(E):
         self.button.setStyleSheet('QPushButton {background-color:#FFFFFF;}')
         self.button.setMaximumWidth(100)
         self.button.setIconSize(QSize(50, 50))
-        self.button.clicked.connect(self.clickSave)
+
         self.button.move(50000, 50000)  # for some reason it spawns two buttons, so i just set the second to be off page
 
-    def clickSave(self):
-        global profileNewest
-        f = profileNewest
-        location = f.split("/", 1)
-        profile = location[0]
-
-        printFiles = os.listdir(
-            "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
-
-        highest = 0
-        newest = ""
-        for elim in printFiles:
-            m = elim.split("-", 1)
-            x = str(m[0])
-            x = x[2:]
-            x = int(x)
-            if x > highest:
-                highest = x
-                newest = elim  # get the newest change to the profile
-
-        print(profile + "/" + newest)
-        profileNewest = str(profile + "/" + newest)
-
-        data2 = importYaml()
-        # pList = ["property", "expected_types", "description", "type", "type_url", "bsc_description", "equivalentProperty",                              # grab from the actual data instead
-        #       "marginality", "cardinality", "controlled_vocab", "example"]
-        b = data2['mapping'][0]
-        pList = []
-        for elim in b:
-            pList.append(elim)
-
-        q = getLiTot()
-
-        row = self.getInd()
-        if row != 0:
-            for d in range(len(data2['mapping'])):
-                if data2['mapping'][d]['property'] == q[row][0]:
-                    for i in range(len(pList)):
-                        w = boxList[i]
-                        x = str(w.toPlainText())
-                        data2['mapping'][d][pList[i]] = x
-                        if i == 1:
-                            x = ast.literal_eval(x)  # this beforehand is a list that looks like a string, this small function converts it nicely to a list for me
-                            data2['mapping'][d][pList[i]] = x
-
-        newEntryList = {}
-        if row == 0:
-            for i in range(len(pList)):
-                w = boxList[i]
-                left = pList[i]
-                right = str(w.toPlainText())
-                if i == 1:
-                    right = ast.literal_eval(right)
-                newEntryList[left] = right
-
-            data2['mapping'].append(newEntryList)
-            print(newEntryList)
-        boxList.clear()
-
-        s = "\n---\n"
-        foundHTML = False
-
-        currentVersion = highest
-        currentVersion = currentVersion + 1
-
-        today = date.today()
-        dateToday = today.strftime("%Y_%m_%d")
-        f = profileNewest
-
-        fileToOpen = '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + location[0] + '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
-        with open('../pythonProject/0.11-RELEASE.html', 'r') as f:
-            for line in f:
-                if '<!DOCTYPE HTML>' in line:
-                    foundHTML = True
-                if foundHTML:
-                    s = s + line
-
-        # open(fileToOpen, "w").close()  # make sure the file is empty
-        with open(fileToOpen, 'a') as file:
-            file.write("---\n")
-            documents = yaml.dump(data2, file, default_flow_style=False, sort_keys=False)
-            file.write(s)
-
-    def createTable2(self):
+    def createTable2(self, boxList):
         data2 = importYaml()
         b = data2['mapping'][0]
         rowNames = []
@@ -757,7 +681,7 @@ class Second(E):
         self.tableWidget2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # self.tableWidget2.setMaximumWidth(900)
 
-        row = self.getInd()
+        row = getInd()
         liOpt2 = []
         liRec2 = []
         liMin2 = []
@@ -774,18 +698,17 @@ class Second(E):
 
         res2 = liTot2[row]
 
-        # boxList = []
         for x in range(h):
             textEdit = QTextEdit()
+            textEdit.setText('')
             textEdit.setFont(QFont("Ariel", 9))
             if row != 0:
                 textEdit.setText(res2[x])
             else:
-                textEdit.setText("")
+                textEdit.setText('')
             boxList.append(textEdit)
             self.tableWidget2.setCellWidget(x, 0, textEdit)
             self.tableWidget2.setRowHeight(x, 200)
-
         # w = self.textEdit.toPlainText()
         # w.toPlainText()
         # print(str(s))
@@ -803,21 +726,109 @@ class Second(E):
 
         self.show()
 
-    def getInd(self):
-        global btnIndex
-        x = btnIndex
-        return x
-
     def closeEvent(self, event):
         reply = QMessageBox.question(self, 'Message',
                                      "Are you sure you want to quit? Any unsaved changes will not be kept",
                                      QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
+
             event.accept()
         else:
             event.ignore()
             # add a pop up box that will prompt the user if they hit the quit button
+
+
+def getInd():
+    global btnIndex
+    x = btnIndex
+    return x
+
+
+def clickSave(boxList, l1):
+    print("1123454311")
+    global profileNewest
+    f = profileNewest
+    location = f.split("/", 1)
+    profile = location[0]
+
+    printFiles = os.listdir(
+        "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
+
+    highest = 0
+    newest = ""
+    for elim in printFiles:
+        m = elim.split("-", 1)
+        x = str(m[0])
+        x = x[2:]
+        x = int(x)
+        if x > highest:
+            highest = x
+            newest = elim  # get the newest change to the profile
+
+    print(profile + "/" + newest)
+    profileNewest = str(profile + "/" + newest)
+
+    data2 = importYaml()
+    # pList = ["property", "expected_types", "description", "type", "type_url", "bsc_description", "equivalentProperty",                              # grab from the actual data instead
+    #       "marginality", "cardinality", "controlled_vocab", "example"]
+    b = data2['mapping'][0]
+    pList = []
+    for elim in b:
+        pList.append(elim)
+
+    q = getLiTot()
+
+    row = getInd()
+    try:
+        for d in range(len(data2['mapping'])):
+            if data2['mapping'][d]['property'] == q[row][0]:
+                for i in range(len(pList)):
+                    w = boxList[i]
+                    x1 = str(w.toPlainText())
+                    data2['mapping'][d][pList[i]] = x1
+                    if i == 1:
+                        x1 = ast.literal_eval(x1)  # this beforehand is a list that looks like a string, this small function converts it nicely to a list for me
+                        data2['mapping'][d][pList[i]] = x1
+    except:
+        print("something went wrong")
+    try:
+        if row == 0:
+            for i in range(len(pList)):
+                w = boxList[i]
+                x2 = str(w.toPlainText())
+                print(d)
+                data2['mapping'][d][pList[i]] = x2
+                if i == 1:
+                    x2 = ast.literal_eval(x2)  # this beforehand is a list that looks like a string, this small function converts it nicely to a list for me
+                    data2['mapping'][d][pList[i]] = x2
+    except:
+        print("that was the wrong data that you typed")
+        l1.setText("Sorry, you entered the incorrect format for the YAML, please try again!")
+
+    s = "\n---\n"
+    foundHTML = False
+
+    currentVersion = highest
+    currentVersion = currentVersion + 1
+
+    today = date.today()
+    dateToday = today.strftime("%Y_%m_%d")
+    f = profileNewest
+
+    fileToOpen = '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + location[0] + '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
+    with open('../pythonProject/0.11-RELEASE.html', 'r') as f:
+        for line in f:
+            if '<!DOCTYPE HTML>' in line:
+                foundHTML = True
+            if foundHTML:
+                s = s + line
+
+    # open(fileToOpen, "w").close()  # make sure the file is empty
+    with open(fileToOpen, 'a') as file:
+        file.write("---\n")
+        documents = yaml.dump(data2, file, default_flow_style=False, sort_keys=False)
+        file.write(s)
 
 
 class ExampleButtons(QWidget):
@@ -831,6 +842,7 @@ class ExampleButtons(QWidget):
         self.setMinimumWidth(500)
         self.setMinimumHeight(500)
         self.center()
+
         myFont = QtGui.QFont()
         myFont.setBold(True)
         ku = self.getInd2()
@@ -884,6 +896,33 @@ class ExampleButtons(QWidget):
             return listExample
 
         return "Property: \n" + liTot2[ku][0] + "\n\nExample: \n" + liTot2[ku][9]
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+
+class StartWarning(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(200, 200, 200, 220)
+        layout = QVBoxLayout()
+        label = QLabel("The application has to download the whole Bioschemas Github, so this may take a few moments. This window will disappear after a few seconds.")
+        label.setWordWrap(True)
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        layout.addWidget(label)
+        self.setLayout(layout)
+        self.center()
+        self.show()
+        # threaded1()
+        QtCore.QTimer.singleShot(8000, self.close)
+        QtCore.QTimer.singleShot(200, openApp)
 
     def center(self):
         qr = self.frameGeometry()
@@ -984,33 +1023,6 @@ def findYamlValue(data, row, rowNames):
     return dataList
 
 
-class StartWarning(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-    def initUI(self):
-        self.setGeometry(200, 200, 200, 220)
-        layout = QVBoxLayout()
-        label = QLabel("The application has to download the whole Bioschemas Github, so this may take a few moments. This window will disappear after a few seconds.")
-        label.setWordWrap(True)
-        label.setAlignment(QtCore.Qt.AlignCenter)
-        layout.addWidget(label)
-        self.setLayout(layout)
-        self.center()
-        self.show()
-        # threaded1()
-        QtCore.QTimer.singleShot(8000, self.close)
-        QtCore.QTimer.singleShot(200, openApp)
-
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-
-
 def openApp():
     ex = App()
     # sys.exit(app.exec_())
@@ -1018,10 +1030,10 @@ def openApp():
 
 def main():
     # importYaml()
-    app2 = QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = StartWarning()
     window.show()
-    app2.exec_()
+    app.exec_()
 
 
 if __name__ == '__main__':
