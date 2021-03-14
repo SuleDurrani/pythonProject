@@ -118,14 +118,14 @@ class App(QWidget):
         for i in range(h):
             btn = QPushButton()
             currentButton = printProfiles[i]
-            btn.setText(str(currentButton) + str(i))
+            btn.setText(str(currentButton))
             self.i = i
             btn.clicked.connect(partial(self.on_click, i))
             self.tableWidget.setCellWidget(i, 0, btn)
 
     @pyqtSlot()
     def on_click(self, i):
-        print(str(i)+" iaewhdoiuhwaoiudhwa")
+        print(str(i) + " iaewhdoiuhwaoiudhwa")
         profile = str(printProfiles[i])
         printFiles = os.listdir(
             "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
@@ -599,13 +599,12 @@ class E(QWidget):
         for i in range(len(t)):
             print("c=" + str(count))
             if i > index:
-                print("i= "+str(i))
-                print("nlent"+str(len(t)))
-                if i != len(t)-1:
+                print("i= " + str(i))
+                print("nlent" + str(len(t)))
+                if i != len(t) - 1:
                     print(("llllll " + str(len(allVersionList))))
                     os.remove('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[i])
             count = count + 1
-
 
         currentVersion = startingHighest + 1
 
@@ -964,11 +963,10 @@ def alignText(text):
 
 
 def importYaml():
-    # cwd = os.getcwd() + "/BioschemasGitClone/bioschemas.github.io/_profiles"
-    print("yayyyyy")
-    with open('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profileNewest) as f:
-        data = list(yaml.safe_load_all(f))
-        print("aaaaaawwww")
+    with open('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profileNewest, encoding='utf-8') as f:
+        # needs to be forced to utf-8 because if not python will not parse the characters correctly (yaml default is utf-16), probably resulting in a crash
+        t = yaml.safe_load_all(f)
+        data = list(t)
         return data[0]
 
 
@@ -1002,9 +1000,10 @@ class StartWarning(QWidget):
         self.setLayout(layout)
         self.center()
         self.show()
-        #threaded1()
+        # threaded1()
         QtCore.QTimer.singleShot(8000, self.close)
         QtCore.QTimer.singleShot(200, openApp)
+
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
@@ -1014,7 +1013,8 @@ class StartWarning(QWidget):
 
 def openApp():
     ex = App()
-    #sys.exit(app.exec_())
+    # sys.exit(app.exec_())
+
 
 def main():
     # importYaml()
@@ -1022,6 +1022,7 @@ def main():
     window = StartWarning()
     window.show()
     app2.exec_()
+
 
 if __name__ == '__main__':
     main()
