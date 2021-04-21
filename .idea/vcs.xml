@@ -4,5 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BioschemasGitClone/Bioschemas-Clone-For-Honours" vcs="" />
     <mapping directory="$PROJECT_DIR$/BioschemasGitClone/bioschemas.github.io" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dist/BioschemasGitClone/bioschemas.github.io" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dist/main/BioschemasGitClone/bioschemas.github.io" vcs="Git" />
   </component>
 </project>

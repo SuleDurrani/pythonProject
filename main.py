@@ -17,6 +17,8 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMessageBox, QDesktopWidget, 
 from bs4 import BeautifulSoup
 from natsort import natsorted
 
+
+
 liOpt = []  # initialize variables for the recommended, the minimum and the optional
 liRec = []  # properties, based on marginality
 liMin = []
@@ -47,7 +49,7 @@ class App(QWidget):
         self.initUI()
 
     def initUI(self):
-        print("hello")
+        #print("hello")
         # app = QApplication(sys.argv)
         cwd = os.getcwd()
         cwd = cwd + "\\BioschemasGitClone"
@@ -126,10 +128,10 @@ class App(QWidget):
 
     @pyqtSlot()
     def on_click(self, i):
-        print(str(i) + " iaewhdoiuhwaoiudhwa")
+        #print(str(i) + " iaewhdoiuhwaoiudhwa")
         profile = str(printProfiles[i])
         printFiles = os.listdir(
-            "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
+            "BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
 
         global highest
         highest = 0
@@ -146,7 +148,7 @@ class App(QWidget):
         global startingHighest
         startingHighest = highest
 
-        print(profile + "/" + newest)
+        #print(profile + "/" + newest)
         global profileNewest
         profileNewest = str(profile + "/" + newest)
 
@@ -189,22 +191,22 @@ class E(QWidget):
             }
 
             """)
-        actionFile = self.menubar.addMenu("File")
-        actionFile.addAction("New")
-        actionFile.addAction("Open")
-        actionFile.addAction("Save")
+        #actionFile = self.menubar.addMenu("File")
+        #actionFile.addAction("New")
+        #actionFile.addAction("Open")
+        #actionFile.addAction("Save")
 
-        self.menubar.addAction("Switch Profile")
+        #self.menubar.addAction("Switch Profile")
 
         openFile = QAction("Open Externally", self)
         self.menubar.addAction(openFile)
         openFile.triggered.connect(self.onClickOpenNotepad)
 
-        action1 = QtWidgets.QWidgetAction(self)
-        self.label1 = QtWidgets.QLabel("Action1")
-        action1.setDefaultWidget(self.label1)
-        action1.setText('Action1')
-        self.menubar.addAction(action1)
+        #action1 = QtWidgets.QWidgetAction(self)
+        #self.label1 = QtWidgets.QLabel("Action1")
+        #action1.setDefaultWidget(self.label1)
+        #action1.setText('Action1')
+        #self.menubar.addAction(action1)
 
         # menubar.setStyleSheet("QMenuBar::item {background: rgb(170,200,200)}")
 
@@ -260,7 +262,7 @@ class E(QWidget):
     def creatingTable(self):
         self.tableWidget = QTableWidget()
 
-        print("hiawdawde")
+        #print("hiawdawde")
         data = importYaml()  # get the initial data from the file and set it to a variable
 
         b = data['mapping'][0]
@@ -418,7 +420,7 @@ class E(QWidget):
                         if liTot[x][0] != "Marginality: Unspecified":
                             eachButton = self.tableButton()
                             eachButton.setGeometry(200, 150, 100, 40)
-                            eachButton.setIcon(QIcon('../pythonProject/edit_button.png'))
+                            eachButton.setIcon(QIcon('edit_button.png'))
                             eachButton.setIconSize(QSize(60, 60))
                             eachButton.setStyleSheet('QPushButton {background-color: #FFFFFF; border:  none}')
 
@@ -433,7 +435,7 @@ class E(QWidget):
                         if liTot[x][0] != "Marginality: Unspecified":
                             eachExampleButton = self.tableExampleButton()
                             # eachExampleButton.setGeometry(200, 150, 100, 40)
-                            eachExampleButton.setIcon(QIcon('../pythonProject/example_icon.png'))
+                            eachExampleButton.setIcon(QIcon('example_icon.png'))
                             eachExampleButton.setIconSize(QSize(60, 60))
                             eachExampleButton.setStyleSheet('QPushButton {background-color: #FFFFFF; border:  none}')
 
@@ -546,8 +548,8 @@ class E(QWidget):
     def onClickOpenNotepad(self):
         global profileNewest
         p = profileNewest
-        print(p)
-        subprocess.call(['notepad.exe', '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + p])
+        #print(p)
+        subprocess.call(['notepad.exe', 'BioschemasGitClone/bioschemas.github.io/_profiles/' + p])
 
 
     def update_display(self, text):
@@ -570,15 +572,15 @@ class E(QWidget):
 
     def closeEvent(self, event):
         global startingHighest
-        print(startingHighest)
+        #print(startingHighest)
         c = startingHighest
 
         global profileNewest
         f = profileNewest
         location = f.split("/", 1)
         profile = location[0]
-        p = os.listdir('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile)
-        print(p)
+        p = os.listdir('BioschemasGitClone/bioschemas.github.io/_profiles/' + profile)
+        #print(p)
 
         h = 0
         newest = ""
@@ -594,24 +596,24 @@ class E(QWidget):
                 newest = elim
 
         lenDirectory = h
-        print(lenDirectory)
+        #print(lenDirectory)
         x = natsorted(p)  # little function i found that will sort the list in a natural way, similar to windows file explorer
-        print(x)
+        #print(x)
         t = sorted(allVersionList)
-        print(t)
-        print("000")
-        print("oahwdh8o" + str(startingHighest))
+        #print(t)
+        #print("000")
+        #print("oahwdh8o" + str(startingHighest))
         index = t.index(int(startingHighest))
-        print(index)
+        #print(index)
         count = 0
         for i in range(len(t)):
-            print("c=" + str(count))
+            #print("c=" + str(count))
             if i > index:
-                print("i= " + str(i))
-                print("nlent" + str(len(t)))
+                #print("i= " + str(i))
+                #print("nlent" + str(len(t)))
                 if i != len(t) - 1:
-                    print(("llllll " + str(len(allVersionList))))
-                    os.remove('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[i])
+                    #print(("llllll " + str(len(allVersionList))))
+                    os.remove('BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[i])
             count = count + 1
 
         currentVersion = startingHighest + 1
@@ -619,11 +621,11 @@ class E(QWidget):
         today = date.today()
         dateToday = today.strftime("%Y_%m_%d")
 
-        p = os.listdir('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile)  # get the new length of the directory
+        p = os.listdir('BioschemasGitClone/bioschemas.github.io/_profiles/' + profile)  # get the new length of the directory
         fileToRename = '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
         # print("\n" + p[-1])
         if t[-1] != startingHighest:
-            os.rename('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[-1], '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + fileToRename)
+            os.rename('BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + x[-1], 'BioschemasGitClone/bioschemas.github.io/_profiles/' + profile + '/' + fileToRename)
 
 
 
@@ -638,8 +640,8 @@ class Second(QWidget):
         l1 = QLabel()
         l1.setText(
             "This is the area where you can edit a selected property or create a new one.\nJust type in the boxes to change them, "
-            "and hit save when you are done.\nWhen you click save the changes will be saved to a new file.\nBe sure to hover over each of the property names"
-            "as they have some specific formatting rules")
+            "and hit save when you are done. Then close the application.\nWhen you click save the changes will be saved to a new file.\n\n"
+            "[PLEASE NOTE] \nFor expected type, make sure the whole entry is in square brackets and put a comma between each entity (example: ['URL', 'Name']).")
         l1.setFont((QFont("Ariel", 10)))
         boxList = []
         self.createTable2(boxList)
@@ -659,7 +661,7 @@ class Second(QWidget):
 
     def saveButton(self):
         self.button = QPushButton('', self)
-        self.button.setIcon(QIcon('../pythonProject/save.png'))
+        self.button.setIcon(QIcon('save.png'))
         self.button.setStyleSheet('QPushButton {background-color:#FFFFFF;}')
         self.button.setMaximumWidth(100)
         self.button.setIconSize(QSize(50, 50))
@@ -746,14 +748,14 @@ def getInd():
 
 
 def clickSave(boxList, l1):
-    print("1123454311")
+    #print("1123454311")
     global profileNewest
     f = profileNewest
     location = f.split("/", 1)
     profile = location[0]
 
     printFiles = os.listdir(
-        "../pythonProject\BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
+        "BioschemasGitClone/bioschemas.github.io/_profiles/" + profile)
 
     highest = 0
     newest = ""
@@ -766,7 +768,7 @@ def clickSave(boxList, l1):
             highest = x
             newest = elim  # get the newest change to the profile
 
-    print(profile + "/" + newest)
+    #print(profile + "/" + newest)
     profileNewest = str(profile + "/" + newest)
 
     data2 = importYaml()
@@ -797,11 +799,16 @@ def clickSave(boxList, l1):
             for i in range(len(pList)):
                 w = boxList[i]
                 x2 = str(w.toPlainText())
-                print(d)
+                #print(d)
                 data2['mapping'][d][pList[i]] = x2
                 if i == 1:
                     x2 = ast.literal_eval(x2)  # this beforehand is a list that looks like a string, this small function converts it nicely to a list for me
                     data2['mapping'][d][pList[i]] = x2
+        l1.setText(
+            "This is the area where you can edit a selected property or create a new one.\nJust type in the boxes to change them, "
+            "and hit save when you are done. Then close the application.\nWhen you click save the changes will be saved to a new file."
+            "\n\n[PLEASE NOTE] \nFor expected type, make sure the whole entry is in square brackets and put a comma between each entity (example: ['URL', 'Name'])."
+            "\n\nTHAT SAVE WAS MADE CORRECTLY!!\n")
     except:
         print("that was the wrong data that you typed")
         l1.setText("Sorry, you entered the incorrect format for the YAML, please try again!")
@@ -816,14 +823,14 @@ def clickSave(boxList, l1):
     dateToday = today.strftime("%Y_%m_%d")
     f = profileNewest
 
-    fileToOpen = '../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + location[0] + '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
-    with open('../pythonProject/0.11-RELEASE.html', 'r') as f:
+    fileToOpen = 'BioschemasGitClone/bioschemas.github.io/_profiles/' + location[0] + '/0.' + str(currentVersion) + '-DRAFT-' + dateToday + '.html'
+    with open('0.11-RELEASE.html', 'r') as f:
         for line in f:
             if '<!DOCTYPE HTML>' in line:
                 foundHTML = True
             if foundHTML:
                 s = s + line
-
+    #data2.encode(encoding='utf-16')
     # open(fileToOpen, "w").close()  # make sure the file is empty
     with open(fileToOpen, 'a') as file:
         file.write("---\n")
@@ -836,6 +843,7 @@ class ExampleButtons(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.btnIndex2 = btnIndex2
 
     def initUI(self):
         self.setWindowTitle('Single Example Viewer')
@@ -902,7 +910,6 @@ class ExampleButtons(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
 
 class StartWarning(QWidget):
     def __init__(self):
@@ -1002,7 +1009,7 @@ def alignText(text):
 
 
 def importYaml():
-    with open('../pythonProject/BioschemasGitClone/bioschemas.github.io/_profiles/' + profileNewest, encoding='utf-8') as f:
+    with open('BioschemasGitClone/bioschemas.github.io/_profiles/' + profileNewest, encoding='utf-8') as f:
         # needs to be forced to utf-8 because if not python will not parse the characters correctly (yaml default is utf-16), probably resulting in a crash
         t = yaml.safe_load_all(f)
         data = list(t)
